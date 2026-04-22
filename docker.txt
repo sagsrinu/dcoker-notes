@@ -97,9 +97,70 @@ This shows /bin/bash as the only active process, confirming the container runs o
 9.  docker run -dt ubuntu /bin/bash
 10. ps -aux | grep -v grep
 11.docker ps 
-12.docker exec -it e958871bc25a /bin/bash - login into container
+12.docker exec -it e958871bc25a /bin/bash - login into running container
 13.docker inspect ubuntu |grep CMD - this will tell on which process container run.
-14.
+14.docker run -it ubuntu "python --version" - executable file not found
+15.docker run -it ubuntu python --version  - executable file not found.
+16.docker run -it ubuntu touch file3 - file3 will br created and exited from container
+17.docker pull python
+18.docker stop <container_id_or_name> - to stop the docker process
+**********************************************************************************************************************************************
+Python application deployment inside docker
+**********************************************************************************************************************************************
+
+1) launch instance
+
+2) yum install docker -y
+
+3) docker run -it amazonlinux
+
+4) yum install python -y
+
+5) copy the code into app.py
+
+cat > app.py
+
+from http.server import HTTPServer, BaseHTTPRequestHandler
+
+class AppHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Hello from EC2 ")
+
+server = HTTPServer(("0.0.0.0", 8000), AppHandler)
+print("Server running...")
+server.serve_forever()
+
+6) yum install python3-pip -y
+
+7) pip3 install flask
+
+8) with diff terminal - ps aux- if not allowing then install ps -aux  ---sudo yum install procps-ng
+
+9) ps -aux 
+**********************************************************************************************************************************************
+nginx deployment
+**********************************************************************************************************************************************	
+1) dcoker pull ngnix
+
+2) docker run -dt -p 81:80 nginx   (past forward 81 is ec2 level - 80 is container level)
+
+3) [root@ip-172-31-22-254 ~]# docker ps -a |grep nginx
+904d912bc87b   nginx         "/docker-entrypoint.…"   About a minute ago   Up About a minute              0.0.0.0:81->80/tcp, :::81->80/tcp   hardcore_wu
+99eb82e6ee43   nginx         "/docker-entrypoint.…"   4 minutes ago        Exited (127) 4 minutes ago                                         hardcore_tharp
+71b60a3adaba   nginx         "/docker-entrypoint.…"   5 minutes ago        Exited (0) 2 minutes ago                                           nostalgic_sutherland
+
+
+4) open the port at SG level
+
+5) access the nginx from Web framework.
+
+6)docker run -dt -p 82:80 nginx 
+
+7) now if you want to install nginx in local server and try to start it , it will not allow bcz port 80 already used for container nginx process.
+**********************************************************************************************************************************************
+
 
 
 
