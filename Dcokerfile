@@ -1,0 +1,40 @@
+***************************
+Creation of dcoker image - docker file
+**************************
+1)Lunch instance
+2)Connect instance
+3)install docker - yum install docker -y
+4)systemctl docker start
+5)docker --version
+6) Create docker file with all instructions
+********************************************
+FROM ubuntu
+RUN  apt update -y && \
+apt install python3-pip -y
+WORKDIR /app
+COPY . /app
+RUN pip3 install -r requirements.txt
+CMD ["python3", "app.py"]
+*********************************************
+FROM amazonlinux
+RUN yum update -y && \
+yum install python3-pip -y
+WORKDIR /app
+RUN yum install git -y
+RUN git clone https://github.com/sagsrinu/python-app.git .
+RUN pip3 install -r requirements.txt
+CMD ["python3", "app.py"]
+************************************************************
+dcoker build -t img05 . -- build image
+************************************************************
+docker run -dt -p 5001:8000 img05 - run image without interactive mode
+5001 - port forwarding
+8000 - with app port
+************************************************************
+docker image prune -a
+docker system prune -a
+************************************************************
+
+
+
+ 
